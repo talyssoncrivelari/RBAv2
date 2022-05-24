@@ -66,16 +66,17 @@ function preload() {
 
 function setup() {
 
-  let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  /*let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   if(isMobile) {
     canW = displayWidth;
     canH = displayHeight;
     createCanvas(displayWidth, displayHeight);
-  } else {
+  } else {*/
     canW = windowWidth;
     canH = windowHeight;
-    createCanvas(windowWidth, windowHeight);
-  }
+//    createCanvas(windowWidth, windowHeight);
+//  }
+  createCanvas(windowWidth, windowHeight);
   ///SPRITES///
   edges = createEdgeSprites();
   rocket = createSprite(canW/2, canH/2 /*+ 150*/);
@@ -886,4 +887,7 @@ function backSetup() {
   }
 }
 
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
 /////      CTRL + H  -  SUBSTITUIR    /////
