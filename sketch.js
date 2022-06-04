@@ -1,5 +1,5 @@
 ///VARIABLES///
-let rocket;
+let rocket, panel;
 let explosion;
 let coinIcon;
 let lifeIcon1;
@@ -19,7 +19,7 @@ let cambio = 0;
 let RBAThemeSound;
 let explosionSound, coinSound, powerUpSound, laserSound, delaySound, destroySound, lifeUpSound, endSound, gameOverSound;
 ///IMAGES///
-let coinIconImg, lifeIconImg, lifeIcon2xImg, star1Img, star2Img, rocketRun, coinsImg, powerImg, delayImg, lifeUpImg, asteroidImg, asteroidDestroyedImg;
+let coinIconImg, lifeIconImg, lifeIcon2xImg, star1Img, star2Img, rocket0, coinsImg, powerImg, delayImg, lifeUpImg, asteroidImg, asteroidDestroyedImg;
 ///GROUPS///
 let asteroidsGroup, lasersX1Group, starsGroup, coinsGroup, powerGroup, delayGroup, lifeUpGroup;
 ///BOTTONS///
@@ -40,7 +40,7 @@ function preload() {
   lifeIcon2xImg = loadImage("./assets/Heart2x.png");
   star1Img = loadImage("./assets/star01_2D0.png");
   star2Img = loadImage("./assets/star02_2D0.png");
-  rocketRun = loadAnimation("./assets/x1ROCKET010.png", "./assets/x2ROCKET010.png", "./assets/x3ROCKET010.png");
+  rocket0 = loadAnimation("./assets/x1ROCKET010.png", "./assets/x2ROCKET010.png", "./assets/x3ROCKET010.png");
   coinsImg = loadImage("./assets/Coin0.png")
   powerImg = loadImage("./assets/poder+.png");
   delayImg = loadImage("./assets/delay0.png");
@@ -48,11 +48,11 @@ function preload() {
   asteroidImg = loadImage("./assets/asteroide2D.png");
   explosion = loadImage("./assets/explosionnn.jpg");
   asteroidDestroyedImg = loadImage("./assets/AsteroidDestroyed.png");
-  titleImg = loadImage("./assets/RBA0.png");
+  titleImg = loadImage("./assets/RBAtitle.png");
   //restartBottonImg = loadImage("./assets/RestartBotton0.png");
   //quitBottonImg = loadImage("./assets/QuitBotton0.png");
   ///SOUNDS///
-  RBAThemeSound = loadSound("./assets/KakyoinThemeRBA.mp3");
+  RBAThemeSound = loadSound("./assets/RBA.mp3");
   explosionSound = loadSound("./assets/Explosion.mp3");
   coinSound = loadSound("./assets/Coin.mp3");
   powerUpSound = loadSound("./assets/Item.mp3");
@@ -77,13 +77,14 @@ function setup() {
 //    createCanvas(windowWidth, windowHeight);
 //  }
   createCanvas(windowWidth, windowHeight);
+
   ///SPRITES///
   edges = createEdgeSprites();
   rocket = createSprite(canW/2, canH/2 /*+ 150*/);
-  rocket.addAnimation("rocket", rocketRun);
+  rocket.addAnimation("rocket", rocket0);
   rocket.scale = canW/1500;
   rocket.rotation = 270;
-  rocket.visible = true;
+  rocket.visible = false;
   //rocket.debug = true;
   coinIcon = createSprite(canW/2 + 575, canH/2 - 300, 50, 50);
   coinIcon.addImage(coinIconImg);
@@ -101,7 +102,7 @@ function setup() {
   lifeIcon3.addImage(lifeIconImg);
   lifeIcon3.scale = 0.025;
   lifeIcon3.visible = false;
-  title = createSprite(canW/2, canH/2 - 750, 25, 15);
+  title = createSprite(canW/2, canH/2 - 650, 25, 15);
   title.scale = canH/3000;
   title.addImage(titleImg);
   playButton = createImg("./assets/PlayBotton0.png");
@@ -129,7 +130,7 @@ function setup() {
   manualButton.hide();
   backButton = createImg("./assets/BackBotton0.png");
   backButton.size(canW/3, canH/11);
-  backButton.position(canW/12, canH/2 + 700);
+  backButton.position(canW/16, canH/2 + 700);
   backButton.mouseClicked(backSetup);
   backButton.hide();
   //restartBotton = createSprite(canW/2, canH-150, 25, 15);
@@ -140,7 +141,7 @@ function setup() {
   //quitBotton.rotation = 90;
   //quitBotton.scale = 0.65;
   //quitBotton.addImage(quitBottonImg);
-  
+
   ///GROUPS///
   asteroidsGroup = new Group();
   starsGroup = new Group();
@@ -153,8 +154,8 @@ function setup() {
   lasersX4Group = new Group();
   lasersX8Group = new Group();
 
-  //RBAThemeSound.play();
-  //RBAThemeSound.looping = true;
+  RBAThemeSound.play();
+  //RBAThemeSound.loop = true;
 }
 
 function draw() {
@@ -171,9 +172,9 @@ function draw() {
   }
   if(gameState == 0.1){
     TimeWorld = 0;
-    //spawnSTARS1();
-    //spawnSTARS2();
-    //spawnCOINS();
+    spawnSTARS1();
+    spawnSTARS2();
+    spawnCOINS();
     backButton.show();
   }
   if(gameState == 0.2){
@@ -181,14 +182,14 @@ function draw() {
     automaticButton.show();
     manualButton.show();
     backButton.show();
-    //spawnSTARS1();
-    //spawnSTARS2();
-    //spawnCOINS();
+    spawnSTARS1();
+    spawnSTARS2();
+    spawnCOINS();
   }
   if(gameState == 1){
     TimeWorld = 0;
-    //spawnSTARS1();
-    //spawnSTARS2();
+    spawnSTARS1();
+    spawnSTARS2();
     rocket.visible = true;
     rocket.velocityY =- 10;
     if(rocket.y < canH - 250) {
@@ -204,8 +205,8 @@ function draw() {
       gameState = 1.1;
     }
   }
-  if(gameState == 1.1){
-    base();
+  if(gameState == 1.1) {
+    //base();
     //spawnASTEROIDS();
     rocket.bounceOff(edges);
     if(rocket.isTouching(asteroidsGroup)) {
@@ -329,7 +330,7 @@ function draw() {
     lasersX4Group.setLifetimeEach(-1);
     lasersX8Group.setLifetimeEach(-1);
     //rocket.scale = 0.095;
-    textSize(45)
+    textSize(45);
     fill("red");
     text("GAME OVER!", canW/2-140, canH/2-50);
     fill("red");
@@ -346,6 +347,9 @@ function draw() {
     TimeWorld = TimeWorld + 4;
   }
 
+  textSize(canW/32);
+  fill("WHITE");
+  text("vTEST", canW - 125, canH - 25);
   //textSize(15);
   //text(""+frameCount, 400, 290);
   drawSprites();
@@ -357,7 +361,7 @@ function draw() {
 
 function spawnSTARS1(){
   if(frameCount % 12 === 0){
-    let star1 = createSprite(Math.round(random(canW)), Math.round(random(canH)));
+    let star1 = createSprite(Math.round(random(canW)), 0);//Math.round(random(canH)));
     star1.addImage(star1Img);
     star1.scale = canW/150;
     star1.velocityY = (6 + TimeWorld * 2/100);
@@ -380,7 +384,7 @@ function spawnSTARS1(){
 
 function spawnSTARS2(){
   if(frameCount % 12 === 0){
-    let star2 = createSprite(Math.round(random(canW)), Math.round(random(canH)));
+    let star2 = createSprite(Math.round(random(canW)), 0);//Math.round(random(canH)));
     star2.addImage(star2Img);
     star2.scale = canW/100;
     star2.velocityY = (6 + TimeWorld * 2/100);
